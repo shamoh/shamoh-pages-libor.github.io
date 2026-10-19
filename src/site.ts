@@ -1,7 +1,7 @@
 export const site = {
   name: 'Libor Kramoliš',
-  tagline: 'Java Developer, Software Architect, Technical Leader',
-  description: 'Libor Kramoliš: software architect, designer and senior Java developer from Prague.',
+  tagline: 'Software Architect, Scala / Java / Kotlin Developer, Technical Leader',
+  description: 'Libor Kramoliš: software architect and senior backend developer (Scala, Java, Kotlin, Go) from Prague.',
   url: 'https://libor.kramolis.cz',
   picture: '/assets/img/shamoh-400.jpg',
   locale: 'en_US',

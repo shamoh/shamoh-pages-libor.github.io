@@ -54,4 +54,16 @@ const skills = defineCollection({
   schema: z.object({ name: z.string(), note: z.string().optional() }),
 });
 
-export const collections = { positions, projects, education, languages, skills };
+const certifications = defineCollection({
+  loader: cv('certifications'),
+  schema: z.object({
+    name: z.string(),
+    issuer: z.string(),
+    year,
+    month: z.number().int().min(1).max(12).optional(),
+    /** e.g. the courses of a series */
+    note: z.string().optional(),
+  }),
+});
+
+export const collections = { positions, projects, education, languages, skills, certifications };

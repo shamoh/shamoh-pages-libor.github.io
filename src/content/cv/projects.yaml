@@ -1,9 +1,30 @@
 # Selected projects, each with the client it was done for; sorted by the years like positions.yaml.
+- id: leveris-core-banking-platform
+  client: Leveris
+  name: Cloud-native core banking platform
+  start: 2019
+  end: 2021
+  summary: Digital core banking platform built from scratch and offered as SaaS to traditional banks, challenger banks
+    and fintech companies (current and deposit accounts, loans, mortgages).
+  highlights:
+  - Design and development of backend services in Java and Spring; one service in Scala and Akka.
+  - HTTP REST APIs described in RAML, asynchronous APIs over Kafka messaging.
+  technologies:
+  - Java
+  - Spring
+  - Scala
+  - Akka
+  - Kafka
+  - MongoDB
+  - RAML
+  - AWS
+  - Kubernetes
+  - Chef
 - id: creative-dock-customer-loans-application
   client: Creative Dock
   name: Customer loans application
   start: 2018
-  end: 2018
+  end: 2019
   summary: Client, advisor, and back-office application for customer loans.
   highlights:
   - Configure DB migration scripts using Flyway DB

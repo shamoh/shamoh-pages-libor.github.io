@@ -1,12 +1,13 @@
-I am a software architect, designer, and senior application developer.
-My primary programming language is Java, already since 1997.
-I have experience with design and development of Java EE applications since 2003 including development of SOAP / REST web services.
-During whole my career I often design and develop API or work for other developers (IDE, development framework, mentoring, troubleshooting).
-I can define development patterns or conventions. I can lead a small development team or participate in the training team.
+I am a software architect and senior backend developer with more than 25 years of experience, most of it on the JVM.
+I started with Java in 1997, went through Java EE and RESTful web services, and today I work mostly in Scala, Java,
+Kotlin and Go.
 
-I am a careful man. I do things in depth, I do not like superficial solutions.
-I can help the team to solve problems because of my knowledge and experience. I am a team player.
-I am a creative man, I like analyzing problems, doing the feasibility study and designing final solutions.
+A big part of my career has been building software for other developers: NetBeans IDE at Sun Microsystems,
+the corporate Java EE framework of Komerční banka, Jersey (the JAX-RS reference implementation) and the configuration
+API of Helidon at Oracle. Since 2018 I have been working as a freelancer: on a cloud-native core banking platform
+built from scratch at Leveris, and on backend systems at Carpentum.
 
-*I love technology. I am interested in functional programming, event-driven and reactive patterns including the actor model.
-I even believe in the future of MDA. I love humor and good mood in the workplace.*
+I like to go in depth: analyse the problem, check what is feasible, and design a solution that lasts.
+I enjoy reactive and event-driven systems, the actor model and functional programming.
+
+*Technology is also my hobby. And I believe a team works best with humor and a good mood.*

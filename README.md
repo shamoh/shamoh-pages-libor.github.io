@@ -19,7 +19,7 @@ npm run preview   # náhled hotového webu z dist/
 
 ```
 src/pages/            stránky: úvod, about/, cv/, 404
-src/content/cv/       data CV v YAML: positions, projects, education, languages, skills
+src/content/cv/       data CV v YAML: positions, projects, education, languages, skills, certifications
 src/content.config.ts schéma dat CV (co která položka může mít)
 src/texts/profile.md  profilový text (About a CV)
 src/site.ts           jméno, popis, e-mail, menu a odkazy (LinkedIn, GitHub, …)

@@ -3,13 +3,14 @@ import { getCollection } from 'astro:content';
 import EmailLink from '../../components/EmailLink.astro';
 import Entry from '../../components/Entry.astro';
 import Base from '../../layouts/Base.astro';
-import { getEducation, getPositions, getProjects } from '../../lib/cv';
+import { getCertifications, getEducation, getPositions, getProjects } from '../../lib/cv';
 import { Content as Profile } from '../../texts/profile.md';
 import { site } from '../../site';
 
 const positions = await getPositions();
 const projects = await getProjects();
 const education = await getEducation();
+const certifications = await getCertifications();
 const languages = await getCollection('languages');
 const skills = await getCollection('skills');
 
@@ -84,6 +85,19 @@ const clients = [...new Set(projects.map((project) => project.data.client))].map
   </section>
 
   <section class="section">
+    <h2 class="label">Certificates</h2>
+    <ul class="certificates">
+      {certifications.map(({ data }) => (
+        <li>
+          <span class="cert-name">{data.name}</span>
+          <span class="cert-meta">{data.issuer}, {data.month ? `${data.month}/` : ''}{data.year}</span>
+          {data.note && <span class="cert-note">{data.note}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section">
     <h2 class="label">Education</h2>
     <div>
       {education.map(({ data }) => (
@@ -150,6 +164,29 @@ const clients = [...new Set(projects.map((project) => project.data.client))].map
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 2rem;
+  }
+  .certificates {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .certificates li {
+    display: grid;
+    break-inside: avoid;
+  }
+  .cert-name {
+    font-weight: 600;
+  }
+  .cert-meta,
+  .cert-note {
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .cert-meta {
+    font: 400 0.8125rem/1.6 var(--mono);
+    color: var(--faint);
   }
   .facts span {
     color: var(--faint);

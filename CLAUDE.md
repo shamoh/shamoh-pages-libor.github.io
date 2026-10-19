@@ -8,7 +8,7 @@ a přesný, nic přeplácaného.
   Instrument Serif (nadpisy, `.display`), Inter (text), JetBrains Mono (štítky, roky, technologie).
 - Stránky `/`, `/about/`, `/cv/` (adresy drží původní web, neměnit); společná hlavička a patička v `src/layouts/Base.astro`.
 - Data CV jsou content collections (`src/content.config.ts`, schéma zod) v `src/content/cv/*.yaml`: pozice, projekty,
-  vzdělání, jazyky, dovednosti. Každá položka má `id`; `start`/`end` jsou roky, bez `end` = trvá.
+  vzdělání, jazyky, dovednosti, certifikáty. Každá položka má `id`; `start`/`end` jsou roky, bez `end` = trvá.
   `getCollection` nedrží pořadí souboru, řadí `src/lib/cv.ts` (nejnovější první).
 - Profilový text je Markdown `src/texts/profile.md` (About i CV).
 - CV se tiskne do PDF (tlačítko „Save as PDF“, `@media print` v `src/pages/cv/index.astro`): bez hlavičky a patičky.

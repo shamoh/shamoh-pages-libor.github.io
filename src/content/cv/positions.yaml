@@ -1,12 +1,39 @@
 # Work experience. start, end: the first and the last year; no end while the position lasts.
 # The pages sort the entries by the years, the newest first (src/lib/cv.ts).
-- id: freelance-2018
-  role: Java Developer / Architect
-  company: Libor Freelancer Kramoliš
+- id: carpentum-2021
+  role: Scala Developer
+  company: Carpentum
+  location: Prague, freelance
+  start: 2021
+  highlights:
+  - Backend development in Scala, Java and Go.
+- id: leveris-2019
+  role: Senior Java Developer
+  company: Leveris
+  location: Prague, freelance
+  start: 2019
+  end: 2021
+  highlights:
+  - Greenfield development of a cloud-native core banking platform, sold as SaaS to banks and fintech companies.
+  - Design and development of backend services in Java and Spring, one of them in Scala and Akka.
+  - Synchronous HTTP REST APIs described in RAML, asynchronous APIs over Kafka messaging.
+  - MongoDB, AWS, Kubernetes and Chef.
+- id: creative-dock-2018
+  role: Senior Java Developer
+  company: Creative Dock
+  location: Prague, freelance
+  start: 2018
+  end: 2019
+  highlights:
+  - Client, advisor and back-office application for customer loans.
+- id: robot-reader-2018
+  role: Senior Java Developer
+  company: Robot Reader
+  location: Prague, freelance
   start: 2018
   end: 2018
   highlights:
-  - Java and Kotlin Developer, IT Architect, Technical Leader.
+  - Fintech chatbot prototype built from Kotlin microservices.
 - id: appdynamics-2017
   role: Technical Leader - Engineering
   company: AppDynamics (Cisco Systems)
