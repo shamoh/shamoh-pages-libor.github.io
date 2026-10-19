@@ -1,0 +1,7 @@
+- id: upol
+  degree: MSc in Mathematical Informatics
+  school: Palacky University, Olomouc
+  start: 1994
+  end: 2000
+  thesis: Develop UML CASE tool in distributed environment. Team work of 10 students realized in Java and CORBA.
+  note: Central European ACM programming contest in 1997 and 1998.

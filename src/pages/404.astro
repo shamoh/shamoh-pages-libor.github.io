@@ -1,7 +1,20 @@
 ---
-import Page from '../layouts/Page.astro';
+import Base from '../layouts/Base.astro';
 ---
 
-<Page title="Page Not Found">
-  <div>Page Not Found.</div>
-</Page>
+<Base title="Page not found">
+  <section class="notfound">
+    <p class="label">404</p>
+    <h1 class="display">Page not found.</h1>
+    <p><a href="/">Back to the home page →</a></p>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    padding-block: clamp(4rem, 12vw, 8rem);
+  }
+  h1 {
+    margin: 1rem 0 2rem;
+  }
+</style>

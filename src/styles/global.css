@@ -1,0 +1,135 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource/instrument-serif';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/jetbrains-mono';
+
+:root {
+  --bg: #fbfbf9;
+  --fg: #16181d;
+  --muted: #5d636e;
+  --faint: #8a909a;
+  --line: #e4e4df;
+  --accent: #2448c9;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Inter Variable', system-ui, sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --page: 64rem;
+  --measure: 40rem;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101114;
+    --fg: #e8e8e4;
+    --muted: #a2a7b0;
+    --faint: #737882;
+    --line: #26282e;
+    --accent: #8ea6ff;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1rem/1.65 var(--sans);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 150ms, color 150ms;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.page {
+  width: min(100% - 3rem, var(--page));
+  margin-inline: auto;
+}
+
+.label {
+  font: 500 0.75rem/1.4 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.display {
+  font-family: var(--serif);
+  font-size: clamp(2.75rem, 7vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.display em {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.prose {
+  max-width: var(--measure);
+  font-size: 1.0625rem;
+}
+
+.prose em {
+  color: var(--muted);
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* a section of a page: a label on the left, the content on the right (one column on narrow screens) */
+.section {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 1rem 2rem;
+  padding-block: 3rem;
+  border-top: 1px solid var(--line);
+}
+
+.section > .label {
+  padding-top: 0.3rem;
+}
+
+@media (max-width: 48rem) {
+  .section {
+    grid-template-columns: 1fr;
+    padding-block: 2.25rem;
+  }
+}

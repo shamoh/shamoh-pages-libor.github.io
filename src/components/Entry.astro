@@ -1,0 +1,79 @@
+---
+// One line of the CV: the period on the left, the title, its place and details on the right.
+import { period } from '../site';
+
+interface Props {
+  start: number;
+  end?: number;
+  title: string;
+  /** the company or school, after the title */
+  place?: string;
+  highlights?: string[];
+  technologies?: string[];
+}
+
+const { start, end, title, place, highlights = [], technologies = [] } = Astro.props;
+---
+
+<article class="entry">
+  <p class="label when">{period(start, end)}</p>
+  <div>
+    <h3>{title}{place && <span class="place"> · {place}</span>}</h3>
+    <slot />
+    {highlights.length > 0 && (
+      <ul>
+        {highlights.map((highlight) => <li>{highlight}</li>)}
+      </ul>
+    )}
+    {technologies.length > 0 && <p class="tech">{technologies.join(' · ')}</p>}
+  </div>
+</article>
+
+<style>
+  .entry {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 0.25rem 1.5rem;
+    break-inside: avoid;
+  }
+  .entry + :global(.entry) {
+    margin-top: 1.75rem;
+  }
+  .when {
+    margin: 0;
+    padding-top: 0.2rem;
+    white-space: nowrap;
+  }
+  h3 {
+    font: 600 1rem/1.4 var(--sans);
+    letter-spacing: -0.005em;
+  }
+  .place {
+    font-weight: 400;
+    color: var(--muted);
+  }
+  ul {
+    margin: 0.4rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+  li + li {
+    margin-top: 0.2rem;
+  }
+  li::marker {
+    color: var(--faint);
+  }
+  .entry :global(p:not(.label)) {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+  }
+  .tech {
+    font: 400 0.8125rem/1.6 var(--mono);
+    color: var(--faint) !important;
+  }
+  @media (max-width: 36rem) {
+    .entry {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
