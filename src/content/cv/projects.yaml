@@ -4,8 +4,9 @@
   name: Cloud-native core banking platform
   start: 2019
   end: 2021
-  summary: Digital core banking platform built from scratch and offered as SaaS to traditional banks, challenger banks
-    and fintech companies (current and deposit accounts, loans, mortgages).
+  summary: Real-time, event-driven core banking platform built from scratch on AWS and offered as SaaS to traditional
+    banks, challenger banks and fintech companies (accounts, payments, loans, mortgages, KYC/AML onboarding), with
+    the whole infrastructure defined in code.
   highlights:
   - Design and development of backend services in Java and Spring; one service in Scala and Akka.
   - HTTP REST APIs described in RAML, asynchronous APIs over Kafka messaging.
