@@ -1,143 +1,196 @@
 ---
+import { getCollection } from 'astro:content';
 import EmailLink from '../../components/EmailLink.astro';
-import { educations, experiences, interests, languages, projects, skills } from '../../lib/cv';
+import Entry from '../../components/Entry.astro';
+import Base from '../../layouts/Base.astro';
+import { getEducation, getPositions, getProjects } from '../../lib/cv';
+import { Content as Profile } from '../../texts/profile.md';
 import { site } from '../../site';
+
+const positions = await getPositions();
+const projects = await getProjects();
+const education = await getEducation();
+const languages = await getCollection('languages');
+const skills = await getCollection('skills');
+
+// projects grouped by their client, the client of the newest project first
+const clients = [...new Set(projects.map((project) => project.data.client))].map((client) => ({
+  client,
+  projects: projects.filter((project) => project.data.client === client),
+}));
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Curriculum Vitae :: {site.title}</title>
-    <meta name="description" content="Libor Kramoliš Curriculum Vitae" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap" />
-    <link rel="stylesheet" href="/cv/assets/plugins/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/cv/assets/plugins/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/cv/assets/css/styles.css" />
-  </head>
+<Base title="Curriculum Vitae" description={`Curriculum vitae of ${site.name}, ${site.tagline}.`}>
+  <section class="intro">
+    <p class="label">Curriculum vitae</p>
+    <h1 class="display">{site.name}</h1>
+    <p class="tagline">{site.tagline}</p>
+    <ul class="contact">
+      <li><EmailLink><Fragment set:html={site.email} /></EmailLink></li>
+      <li><a href={site.url}>{new URL(site.url).host}</a></li>
+      {site.links.slice(0, 2).map((link) => <li><a href={link.url}>{link.title}</a></li>)}
+      <li class="no-print"><button type="button" class="print">Save as PDF</button></li>
+    </ul>
+  </section>
 
-  <body>
-    <div class="wrapper">
-      <div class="sidebar-wrapper">
-        <div class="profile-container">
-          <img class="profile-img" src={site.picture} alt="profile picture" />
-          <h1 class="name">{site.name}</h1>
-          <h3 class="tagline">{site.tagline}</h3>
-        </div>
+  <section class="section">
+    <h2 class="label">Profile</h2>
+    <div class="prose"><Profile /></div>
+  </section>
 
-        <div class="contact-container container-block">
-          <ul class="list-unstyled contact-list">
-            <li class="email"><i class="fa fa-envelope"></i><EmailLink><Fragment set:html={site.email} /></EmailLink></li>
-            <li class="website"><i class="fa fa-globe"></i><a href={`https://${site.website}`} target="_blank">{site.website}</a></li>
-            <li class="linkedin"><i class="fa fa-linkedin"></i><a href={`https://linkedin.com/in/${site.linkedin}`} target="_blank">{site.linkedin}</a></li>
-            <li class="github"><i class="fa fa-github"></i><a href={`https://github.com/${site.github}`} target="_blank">{site.github}</a></li>
-            <li class="twitter"><i class="fa fa-twitter"></i><a href={`https://twitter.com/${site.twitter}`} target="_blank">{site.twitter}</a></li>
-          </ul>
-        </div>
-
-        {educations.length > 0 && (
-          <div class="education-container container-block">
-            <h2 class="container-block-title">Education</h2>
-            {educations.map((education) => (
-              <div class="item">
-                <h4 class="degree">{education.degree}</h4>
-                <h5 class="meta">{education.university}</h5>
-                <div class="time">{education.time}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {languages.length > 0 && (
-          <div class="languages-container container-block">
-            <h2 class="container-block-title">Languages</h2>
-            <ul class="list-unstyled interests-list">
-              {languages.map((language) => (
-                <li>{language.idiom} <span class="lang-desc">({language.level})</span></li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {interests.length > 0 && (
-          <div class="interests-container container-block">
-            <h2 class="container-block-title">Interests</h2>
-            <ul class="list-unstyled interests-list">
-              {interests.map((interest) => <li>{interest.item}</li>)}
-            </ul>
-          </div>
-        )}
-
-        {skills.length > 0 && (
-          <div class="languages-container container-block">
-            <h2 class="container-block-title">Skills &amp; Proficiency</h2>
-            <ul class="list-unstyled interests-list">
-              {skills.map((skill) => (
-                <li>{skill.name} {skill.level && <span class="lang-desc">({skill.level})</span>}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      <div class="main-wrapper">
-        <section class="section summary-section">
-          <h2 class="section-title"><i class="fa fa-user"></i>Career Profile</h2>
-          <div class="summary">
-            <Fragment set:html={site.summary} />
-          </div>
-        </section>
-
-        <section class="section experiences-section">
-          <h2 class="section-title"><i class="fa fa-briefcase"></i>Experiences</h2>
-          {experiences.map((experience) => (
-            <div class="item">
-              <div class="meta">
-                <div class="upper-row">
-                  <h3 class="job-title">{experience.role}</h3>
-                  <div class="time">{experience.time}</div>
-                </div>
-                <div class="company">{experience.company}</div>
-              </div>
-              {experience.details && (
-                <div class="details">
-                  <p>{experience.details}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </section>
-
-        <section class="section projects-section">
-          <h2 class="section-title"><i class="fa fa-archive"></i>Selected Projects</h2>
-          {projects.map((company) => (
-            <>
-              <h3 class="company">{company.name}</h3>
-              {company.projects.map((project) => (
-                <div class="item">
-                  <div class="meta">
-                    <div class="upper-row">
-                      <h4>{project.name}</h4>
-                      <div class="time">{project.time}</div>
-                    </div>
-                  </div>
-                  {project.details && <span class="project-tagline">{project.details}</span>}
-                  {project.responsibilities && (
-                    <ul>
-                      {project.responsibilities.map((responsibility) => <li>{responsibility}</li>)}
-                    </ul>
-                  )}
-                  {project.technologies && <span>Technologies: {project.technologies}.</span>}
-                </div>
-              ))}
-            </>
-          ))}
-        </section>
-      </div>
+  <section class="section" id="experience">
+    <h2 class="label">Experience</h2>
+    <div>
+      {positions.map(({ data }) => (
+        <Entry
+          start={data.start}
+          end={data.end}
+          title={data.role}
+          place={[data.company, data.location].filter(Boolean).join(', ')}
+          highlights={data.highlights}
+        />
+      ))}
     </div>
-  </body>
-</html>
+  </section>
+
+  <section class="section" id="projects">
+    <h2 class="label">Selected projects</h2>
+    <div>
+      {clients.map((group) => (
+        <div class="client">
+          <h3 class="client-name">{group.client}</h3>
+          {group.projects.map(({ data }) => (
+            <Entry start={data.start} end={data.end} title={data.name} highlights={data.highlights} technologies={data.technologies}>
+              {data.summary && <p>{data.summary}</p>}
+            </Entry>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Skills</h2>
+    <ul class="facts">
+      {skills.map(({ data }) => <li>{data.name}{data.note && <span> {data.note}</span>}</li>)}
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Languages</h2>
+    <ul class="facts">
+      {languages.map(({ data }) => <li>{data.name} <span>{data.level}</span></li>)}
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Education</h2>
+    <div>
+      {education.map(({ data }) => (
+        <Entry start={data.start} end={data.end} title={data.degree} place={data.school}>
+          {data.thesis && <p>Thesis: {data.thesis}</p>}
+          {data.note && <p>{data.note}</p>}
+        </Entry>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.querySelector('.print')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .intro {
+    padding-block: clamp(3rem, 8vw, 5rem) 2.5rem;
+  }
+  .intro h1 {
+    margin-top: 1rem;
+  }
+  .tagline {
+    margin-top: 1rem;
+    font-size: 1.1875rem;
+    color: var(--muted);
+  }
+  .contact {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+  .print {
+    font: inherit;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    cursor: pointer;
+  }
+  .print:hover {
+    color: var(--accent);
+    border-color: currentColor;
+  }
+  .client + .client {
+    margin-top: 2.75rem;
+  }
+  .client-name {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+  }
+  .facts span {
+    color: var(--faint);
+  }
+
+  @media print {
+    @page {
+      margin: 16mm 14mm;
+    }
+    :global(:root) {
+      --bg: #fff;
+      --fg: #000;
+      --muted: #333;
+      --faint: #666;
+      --line: #ccc;
+      font-size: 10pt;
+    }
+    :global(a) {
+      text-decoration: none;
+    }
+    .no-print {
+      display: none;
+    }
+    .intro {
+      padding-block: 0 1rem;
+    }
+    .intro h1 {
+      font-size: 2.5rem;
+    }
+    /* the whole width of the paper for the content: the label of a section above it */
+    :global(.section) {
+      padding-block: 1.25rem;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .client {
+      break-inside: auto;
+    }
+    .client-name {
+      font-size: 1.25rem;
+      break-after: avoid;
+    }
+  }
+</style>

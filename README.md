@@ -18,14 +18,19 @@ npm run preview   # náhled hotového webu z dist/
 ## Struktura
 
 ```
-src/pages/        stránky: úvod, about/, cv/, 404
-src/data/cv/      data CV (vzdělání, praxe, projekty, jazyky, dovednosti, zájmy) v YAML
-src/site.ts       jméno, popis, kontakty, odkazy na sociální sítě, profilový text a menu
-src/layouts/      vzhled úvodní stránky (Home) a ostatních stránek (Page)
-src/components/   hlavička, menu, odkazy na sociální sítě, tlačítko nahoru
-src/styles/       SCSS původního tématu
-public/           soubory beze změny (CNAME, favicon, fotky, písma, styly CV)
+src/pages/            stránky: úvod, about/, cv/, 404
+src/content/cv/       data CV v YAML: positions, projects, education, languages, skills
+src/content.config.ts schéma dat CV (co která položka může mít)
+src/texts/profile.md  profilový text (About a CV)
+src/site.ts           jméno, popis, e-mail, menu a odkazy (LinkedIn, GitHub, …)
+src/layouts/Base.astro  hlavička stránky, menu a patička
+src/components/       řádek CV (Entry), odkaz na e-mail (EmailLink)
+src/styles/global.css barvy, písma a společné styly
+public/               soubory beze změny (CNAME, favicon, fotka)
 ```
+
+Nová pozice do CV: položka na začátek `src/content/cv/positions.yaml` (`id`, `role`, `company`, `start`, případně
+`end` a `highlights`); stránky ji seřadí podle let samy. CV se dá uložit do PDF tlačítkem „Save as PDF“.
 
 ## Nasazení
 

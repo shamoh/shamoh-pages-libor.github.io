@@ -1,10 +1,47 @@
 ---
-import Page from '../../layouts/Page.astro';
+import Base from '../../layouts/Base.astro';
+import { Content as Profile } from '../../texts/profile.md';
 import { site } from '../../site';
 ---
 
-<Page title="About">
-  <p>My name is Libor, <strong>Libor</strong> <code>shamoh</code> <strong>Kramoliš</strong>.</p>
+<Base title="About">
+  <section class="intro">
+    <h1 class="display">About</h1>
+    <p class="lead">My name is Libor, <strong>Libor</strong> <code>shamoh</code> <strong>Kramoliš</strong>.</p>
+  </section>
 
-  <Fragment set:html={site.summary} />
-</Page>
+  <section class="section">
+    <h2 class="label">Profile</h2>
+    <div class="prose"><Profile /></div>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Elsewhere</h2>
+    <p class="prose">
+      {site.links.map((link, i) => (
+        <>{i > 0 && ' · '}<a href={link.url}>{link.title}</a></>
+      ))}
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(3rem, 8vw, 5rem) 2.5rem;
+  }
+  .lead {
+    margin-top: 1.5rem;
+    font-size: 1.1875rem;
+    color: var(--muted);
+  }
+  .lead strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+  code {
+    font: 400 0.9em var(--mono);
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+</style>
