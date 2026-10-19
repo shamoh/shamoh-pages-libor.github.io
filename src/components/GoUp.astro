@@ -1,0 +1,9 @@
+<button class="go-up" type="button" aria-label="Back to top">&#x25B2;</button>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.go-up')!;
+  const update = () => button.classList.toggle('visible', window.scrollY > 500);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+  button.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>

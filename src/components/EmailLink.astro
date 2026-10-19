@@ -1,0 +1,16 @@
+---
+import { site } from '../site';
+
+// The address stays as HTML entities also in the href (set:html; an attribute expression would escape the "&"),
+// the browser decodes them, spam robots reading the source do not.
+interface Props {
+  class?: string;
+  target?: string;
+}
+
+const { class: className, target } = Astro.props;
+const attrs = [className && ` class="${className}"`, target && ` target="${target}"`].filter(Boolean).join('');
+const content = await Astro.slots.render('default');
+---
+
+<Fragment set:html={`<a href="mailto:${site.email}"${attrs}>${content}</a>`} />
