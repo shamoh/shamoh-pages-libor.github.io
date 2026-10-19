@@ -1,0 +1,10 @@
+---
+import Page from '../../layouts/Page.astro';
+import { site } from '../../site';
+---
+
+<Page title="About">
+  <p>My name is Libor, <strong>Libor</strong> <code>shamoh</code> <strong>Kramoliš</strong>.</p>
+
+  <Fragment set:html={site.summary} />
+</Page>

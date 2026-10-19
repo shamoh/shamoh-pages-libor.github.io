@@ -1,0 +1,52 @@
+---
+import GoUp from '../components/GoUp.astro';
+import Head from '../components/Head.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import Nav from '../components/Nav.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { site } from '../site';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <Head title={title} />
+  <body class="page">
+    <MobileMenu />
+    <div class="ust">
+      <div class="ortalaAna">
+        <div class="baslikAna">{site.title}</div>
+        <div class="pc">
+          <Nav variant="main" />
+        </div>
+      </div>
+    </div>
+    <div class="ortalaAna">
+      <div class="yazilar">
+        <div class="yazi">
+          <div class="ustr">
+            <h2>{title}</h2>
+          </div>
+          <hr />
+          <div class="content">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="ortalaAna">
+        <div class="copy">{site.title} © {new Date().getFullYear()}</div>
+        <div class="sosyal">
+          <SocialLinks />
+        </div>
+      </div>
+    </div>
+    <GoUp />
+  </body>
+</html>
