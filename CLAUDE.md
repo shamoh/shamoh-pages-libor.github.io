@@ -12,6 +12,7 @@ a přesný, nic přeplácaného.
   `getCollection` nedrží pořadí souboru, řadí `src/lib/cv.ts` (nejnovější první).
 - Profilový text je Markdown `src/texts/profile.md` (About i CV).
 - CV se tiskne do PDF (tlačítko „Save as PDF“, `@media print` v `src/pages/cv/index.astro`): bez hlavičky a patičky.
+- Google Analytics 4: `site.analytics` (ID měření), tag v `Base.astro` jen v produkčním buildu.
 - E-mail je v HTML jako entity (`site.email`) i v odkazu `mailto:` (`EmailLink.astro`, `set:html`); nedekódovat.
 - `compressHTML: false`: komprese maže mezeru na zalomení řádku mezi inline prvky v textech.
 - Node.js ≥ 24 (`engines`), ve workflow `node-version: 24`.

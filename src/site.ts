@@ -5,6 +5,8 @@ export const site = {
   url: 'https://libor.kramolis.cz',
   picture: '/assets/img/shamoh-400.jpg',
   locale: 'en_US',
+  /** Google Analytics 4 measurement ID; empty = no analytics */
+  analytics: 'G-W86CVR7EJM',
   // HTML entities of the address, so spam robots do not read it (http://wbwip.com/wbw/emailencoder.html)
   email: '&#108;&#105;&#098;&#111;&#114;&#064;&#107;&#114;&#097;&#109;&#111;&#108;&#105;&#115;&#046;&#099;&#122;',
   navigation: [

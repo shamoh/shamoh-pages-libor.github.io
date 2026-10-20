@@ -37,6 +37,19 @@ const path = Astro.url.pathname;
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={picture} />
     <meta name="twitter:card" content="summary" />
+    {import.meta.env.PROD && site.analytics && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.analytics}`}></script>
+        <script is:inline define:vars={{ id: site.analytics }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', id);
+        </script>
+      </>
+    )}
   </head>
   <body>
     <header class="page header">
