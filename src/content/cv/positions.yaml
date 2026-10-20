@@ -48,6 +48,7 @@
   - AWS
   - Kubernetes
   - Chef
+  - Jenkins
 - id: creative-dock-2018
   role: Senior Java Developer
   company: Creative Dock
