@@ -1,14 +1,23 @@
-- id: java
-  name: Java
-  note: since 1997
-- id: kotlin
-  name: Kotlin
-  note: since 2018
-- id: scala
-  name: Scala
-- id: go
-  name: Go
-  note: beginner
-- id: driving-licence
-  name: Driving licence
-  note: B
+# Skills in groups: language (programming languages), approach (how I design software), tool (platforms and
+# libraries). Within a group: by rank (the lower first), then alphabetically.
+- { id: scala, group: language, rank: 1, name: Scala, note: main language today }
+- { id: java, group: language, rank: 2, name: Java, note: since 1997 }
+- { id: kotlin, group: language, rank: 3, name: Kotlin, note: short experience }
+- { id: go, group: language, rank: 4, name: Go, note: marginal }
+- { id: fp, group: approach, name: Functional programming }
+- { id: actors, group: approach, name: Actor model }
+- { id: event-driven, group: approach, name: Event-driven architecture }
+- { id: cqrs, group: approach, name: Event sourcing & CQRS }
+- { id: ddd, group: approach, name: DDD }
+- { id: microservices, group: approach, name: Microservices }
+- { id: api-design, group: approach, name: REST API design }
+- { id: akka, group: tool, name: Akka }
+- { id: tapir, group: tool, name: Tapir }
+- { id: kafka, group: tool, name: Kafka }
+- { id: aws, group: tool, name: AWS }
+- { id: kubernetes, group: tool, name: Kubernetes }
+- { id: docker, group: tool, name: Docker }
+- { id: cassandra, group: tool, name: Cassandra }
+- { id: postgresql, group: tool, name: PostgreSQL }
+- { id: mongodb, group: tool, name: MongoDB }
+- { id: spring, group: tool, name: Spring }
