@@ -1,0 +1,29 @@
+---
+import EmailLink from './EmailLink.astro';
+import { site } from '../site';
+
+interface Props {
+  label: string;
+  /** the link to the other CV page */
+  other: { title: string; url: string };
+}
+
+const { label, other } = Astro.props;
+---
+
+<section class="cv-intro">
+  <p class="label">{label}</p>
+  <h1 class="display">{site.name}</h1>
+  <p class="tagline">{site.tagline}</p>
+  <ul class="contact">
+    <li><EmailLink><Fragment set:html={site.email} /></EmailLink></li>
+    <li><a href={site.url}>{new URL(site.url).host}</a></li>
+    {site.links.slice(0, 2).map((link) => <li><a href={link.url}>{link.title}</a></li>)}
+    <li class="no-print"><a href={other.url}>{other.title}</a></li>
+    <li class="no-print"><button type="button" class="print">Save as PDF</button></li>
+  </ul>
+</section>
+
+<script>
+  document.querySelector('.print')?.addEventListener('click', () => window.print());
+</script>

@@ -1,0 +1,25 @@
+---
+// The list of the abbreviations a page uses (explained also in the printed PDF, where tooltips do not work).
+import { used } from '../lib/abbr';
+
+interface Props {
+  /** all the plain texts the page shows */
+  texts: (string | undefined)[];
+}
+
+const terms = used(Astro.props.texts);
+---
+
+{terms.length > 0 && (
+  <section class="section">
+    <h2 class="label">Abbreviations</h2>
+    <dl class="abbreviations">
+      {terms.map(({ term, title }) => (
+        <div>
+          <dt>{term}</dt>
+          <dd>{title}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+)}

@@ -1,0 +1,76 @@
+# Abbreviations used in the CV. The pages explain each one where it appears (a tooltip) and list the used ones at the
+# bottom (also in the PDF). id = the abbreviation exactly as written in the texts. The build warns about an
+# abbreviation-like word missing here.
+- { id: ACM, title: "Association for Computing Machinery (organiser of the international programming contest)" }
+- { id: AJAX, title: "Asynchronous JavaScript and XML (background requests of a web page)" }
+- { id: AM, title: "Access Manager (Sun Java System Access Manager)" }
+- { id: AML, title: "Anti-Money Laundering" }
+- { id: API, title: "Application Programming Interface" }
+- { id: APIs, title: "Application Programming Interfaces" }
+- { id: APT, title: "Annotation Processing Tool (Java compile-time code generation)" }
+- { id: AWS, title: "Amazon Web Services" }
+- { id: BPM, title: "Business Process Management" }
+- { id: BSC, title: "BNB Smart Chain (Binance blockchain)" }
+- { id: CASE, title: "Computer-Aided Software Engineering" }
+- { id: CDI, title: "Contexts and Dependency Injection (Java EE)" }
+- { id: CI, title: "Continuous Integration" }
+- { id: CLI, title: "Command-Line Interface" }
+- { id: CORBA, title: "Common Object Request Broker Architecture" }
+- { id: CQRS, title: "Command Query Responsibility Segregation" }
+- { id: CzSO, title: "Czech Statistical Office" }
+- { id: DB, title: "Database" }
+- { id: DC/OS, title: "Distributed Cloud Operating System (Mesosphere)" }
+- { id: DDD, title: "Domain-Driven Design" }
+- { id: DTD, title: "Document Type Definition (XML)" }
+- { id: EJBs, title: "Enterprise JavaBeans" }
+- { id: EVM, title: "Ethereum Virtual Machine (Ethereum-compatible blockchains)" }
+- { id: GIT, title: "Git version control system" }
+- { id: GUI, title: "Graphical User Interface" }
+- { id: HTTP, title: "Hypertext Transfer Protocol" }
+- { id: IBM, title: "International Business Machines" }
+- { id: IDE, title: "Integrated Development Environment" }
+- { id: IT, title: "Information Technology" }
+- { id: IoC, title: "Inversion of Control" }
+- { id: J2EE, title: "Java 2 Platform, Enterprise Edition (later Java EE)" }
+- { id: Java EE, title: "Java Platform, Enterprise Edition (today Jakarta EE)" }
+- { id: JAX-RPC, title: "Java API for XML-based Remote Procedure Calls" }
+- { id: JAX-RS, title: "Java API for RESTful Web Services" }
+- { id: JAX-WS, title: "Java API for XML Web Services" }
+- { id: JAXB, title: "Java Architecture for XML Binding" }
+- { id: JDBC, title: "Java Database Connectivity" }
+- { id: JES, title: "Java Enterprise System (Sun)" }
+- { id: JMS, title: "Java Message Service" }
+- { id: JMX, title: "Java Management Extensions" }
+- { id: JRF, title: "Java Required Files (Oracle Fusion Middleware)" }
+- { id: JSF, title: "JavaServer Faces" }
+- { id: JVM, title: "Java Virtual Machine" }
+- { id: KB, title: "Komerční banka" }
+- { id: KYC, title: "Know Your Customer" }
+- { id: MDA, title: "Model-Driven Architecture" }
+- { id: MSSQL, title: "Microsoft SQL Server" }
+- { id: MSc, title: "Master of Science" }
+- { id: PDF, title: "Portable Document Format" }
+- { id: PL/SQL, title: "Procedural Language extension to SQL (Oracle Database)" }
+- { id: POM, title: "Project Object Model (Maven build file)" }
+- { id: RA, title: "Resource Adapter (Java EE Connector Architecture)" }
+- { id: RAML, title: "RESTful API Modeling Language" }
+- { id: REST, title: "Representational State Transfer (HTTP API style)" }
+- { id: RI, title: "Reference Implementation" }
+- { id: S3, title: "Amazon Simple Storage Service" }
+- { id: SaaS, title: "Software as a Service" }
+- { id: SDK, title: "Software Development Kit" }
+- { id: SFTP, title: "SSH File Transfer Protocol" }
+- { id: SNS, title: "Amazon Simple Notification Service" }
+- { id: SOA, title: "Service-Oriented Architecture" }
+- { id: SOAP, title: "Simple Object Access Protocol (XML web services)" }
+- { id: SQS, title: "Amazon Simple Queue Service" }
+- { id: UML, title: "Unified Modeling Language" }
+- { id: VZP, title: "Všeobecná zdravotní pojišťovna (General Health Insurance Company)" }
+- { id: WAS, title: "IBM WebSphere Application Server" }
+- { id: WLS, title: "Oracle WebLogic Server" }
+- { id: WLST, title: "WebLogic Scripting Tool" }
+- { id: WSDL, title: "Web Services Description Language" }
+- { id: XML, title: "Extensible Markup Language" }
+- { id: XQW, title: "Corpus Solutions in-house web framework" }
+- { id: XSD, title: "XML Schema Definition" }
+- { id: XSLT, title: "Extensible Stylesheet Language Transformations" }

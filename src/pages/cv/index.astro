@@ -1,196 +1,273 @@
 ---
+// The CV on one page: the profile, the key positions of the last years in full, skills and a one-line overview of the
+// earlier career. All the details are on /cv/history/.
 import { getCollection } from 'astro:content';
-import EmailLink from '../../components/EmailLink.astro';
-import Entry from '../../components/Entry.astro';
+import Abbreviations from '../../components/Abbreviations.astro';
+import CvIntro from '../../components/CvIntro.astro';
 import Base from '../../layouts/Base.astro';
-import { getEducation, getPositions, getProjects } from '../../lib/cv';
-import { Content as Profile } from '../../texts/profile.md';
-import { site } from '../../site';
+import { abbr, paragraphs } from '../../lib/abbr';
+import { getCertifications, getEducation, getPositions } from '../../lib/cv';
+import profile from '../../texts/profile.md?raw';
+import { period, site } from '../../site';
+import '../../styles/cv.css';
 
 const positions = await getPositions();
-const projects = await getProjects();
+const featured = positions.filter((position) => position.data.featured);
+// consecutive positions at one company (three at Komerční banka) make one line: its years, the latest role and
+// the summaries from the oldest
+const earlier = positions
+  .filter((position) => !position.data.featured)
+  .reduce<{ data: (typeof positions)[number]['data'] }[]>((lines, { data }) => {
+    const last = lines.at(-1);
+    if (last && last.data.company === data.company) {
+      last.data = { ...last.data, start: data.start, summary: `${data.summary} ${last.data.summary}` };
+    } else {
+      lines.push({ data: { ...data } });
+    }
+    return lines;
+  }, []);
+const skills = await getCollection('skills');
+const group = (name: string) =>
+  skills
+    .filter((skill) => skill.data.group === name)
+    .map((skill) => skill.data)
+    .sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99) || a.name.localeCompare(b.name));
+const certifications = await getCertifications();
 const education = await getEducation();
 const languages = await getCollection('languages');
-const skills = await getCollection('skills');
 
-// projects grouped by their client, the client of the newest project first
-const clients = [...new Set(projects.map((project) => project.data.client))].map((client) => ({
-  client,
-  projects: projects.filter((project) => project.data.client === client),
-}));
+const texts = [
+  profile,
+  ...featured.flatMap(({ data }) => [data.role, data.summary, ...data.highlights, ...data.technologies]),
+  ...earlier.flatMap(({ data }) => [data.role, data.company, data.summary]),
+  ...skills.map((skill) => skill.data.name),
+  ...certifications.map((certification) => certification.data.name),
+  ...education.flatMap(({ data }) => [data.degree, data.school]),
+];
 ---
 
 <Base title="Curriculum Vitae" description={`Curriculum vitae of ${site.name}, ${site.tagline}.`}>
-  <section class="intro">
-    <p class="label">Curriculum vitae</p>
-    <h1 class="display">{site.name}</h1>
-    <p class="tagline">{site.tagline}</p>
-    <ul class="contact">
-      <li><EmailLink><Fragment set:html={site.email} /></EmailLink></li>
-      <li><a href={site.url}>{new URL(site.url).host}</a></li>
-      {site.links.slice(0, 2).map((link) => <li><a href={link.url}>{link.title}</a></li>)}
-      <li class="no-print"><button type="button" class="print">Save as PDF</button></li>
-    </ul>
-  </section>
+  <CvIntro label="Curriculum vitae" other={{ title: 'Full history →', url: '/cv/history/' }} />
 
   <section class="section">
     <h2 class="label">Profile</h2>
-    <div class="prose"><Profile /></div>
+    <div class="prose">{paragraphs(profile).map((paragraph) => <p set:html={paragraph} />)}</div>
   </section>
 
   <section class="section" id="experience">
-    <h2 class="label">Experience</h2>
-    <div>
-      {positions.map(({ data }) => (
-        <Entry
-          start={data.start}
-          end={data.end}
-          title={data.role}
-          place={[data.company, data.location].filter(Boolean).join(', ')}
-          highlights={data.highlights}
-        />
-      ))}
-    </div>
-  </section>
-
-  <section class="section" id="projects">
-    <h2 class="label">Selected projects</h2>
-    <div>
-      {clients.map((group) => (
-        <div class="client">
-          <h3 class="client-name">{group.client}</h3>
-          {group.projects.map(({ data }) => (
-            <Entry start={data.start} end={data.end} title={data.name} highlights={data.highlights} technologies={data.technologies}>
-              {data.summary && <p>{data.summary}</p>}
-            </Entry>
-          ))}
-        </div>
+    <h2 class="label">Recent work</h2>
+    <div class="featured">
+      {featured.map(({ data }) => (
+        <article class="card">
+          <header>
+            <h3>{data.company}</h3>
+            <p class="label">{period(data.start, data.end)}</p>
+          </header>
+          <p class="role" set:html={abbr([data.role, data.location].filter(Boolean).join(' · '))} />
+          <p class="lead" set:html={abbr(data.summary)} />
+          {data.highlights.length > 0 && (
+            <ul class="highlights">
+              {data.highlights.map((highlight) => <li set:html={abbr(highlight)} />)}
+            </ul>
+          )}
+          {data.technologies.length > 0 && (
+            <ul class="chips">
+              {data.technologies.map((technology) => <li set:html={abbr(technology)} />)}
+            </ul>
+          )}
+        </article>
       ))}
     </div>
   </section>
 
   <section class="section">
     <h2 class="label">Skills</h2>
-    <ul class="facts">
-      {skills.map(({ data }) => <li>{data.name}{data.note && <span> {data.note}</span>}</li>)}
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2 class="label">Languages</h2>
-    <ul class="facts">
-      {languages.map(({ data }) => <li>{data.name} <span>{data.level}</span></li>)}
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2 class="label">Education</h2>
-    <div>
-      {education.map(({ data }) => (
-        <Entry start={data.start} end={data.end} title={data.degree} place={data.school}>
-          {data.thesis && <p>Thesis: {data.thesis}</p>}
-          {data.note && <p>{data.note}</p>}
-        </Entry>
-      ))}
+    <div class="skills">
+      <div>
+        <h3 class="skill-group">Languages</h3>
+        <ul class="plain">
+          {group('language').map((skill) => (
+            <li>{skill.name}{skill.note && <span class="note"> · {skill.note}</span>}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="skill-group">Approach</h3>
+        <ul class="plain">
+          {group('approach').map((skill) => <li set:html={abbr(skill.name)} />)}
+        </ul>
+      </div>
+      <div>
+        <h3 class="skill-group">Tools</h3>
+        <ul class="chips">
+          {group('tool').map((skill) => <li set:html={abbr(skill.name)} />)}
+        </ul>
+      </div>
     </div>
   </section>
+
+  <section class="section">
+    <h2 class="label">Earlier career</h2>
+    <div>
+      <ol class="timeline">
+        {earlier.map(({ data }) => (
+          <li>
+            <span class="label">{period(data.start, data.end)}</span>
+            <span>
+              <strong set:html={abbr(data.company)} /> · <span set:html={abbr(data.role)} />
+              <span class="note" set:html={abbr(data.summary)} />
+            </span>
+          </li>
+        ))}
+      </ol>
+      <p class="more no-print"><a href="/cv/history/">All positions and projects in detail →</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Certificates</h2>
+    <ul class="plain columns">
+      {certifications.map(({ data }) => (
+        <li><span set:html={abbr(data.name)} /> <span class="note">· {data.month ? `${data.month}/` : ''}{data.year}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="label">Education & languages</h2>
+    <div>
+      {education.map(({ data }) => (
+        <p class="edu">
+          <strong set:html={abbr(data.degree)} />, {data.school}
+          <span class="note"> · {period(data.start, data.end)}</span>
+        </p>
+      ))}
+      <p class="edu">
+        {languages.map(({ data }, i) => (
+          <>{i > 0 && ' · '}{data.name} <span class="note">({data.level})</span></>
+        ))}
+      </p>
+    </div>
+  </section>
+
+  <Abbreviations texts={texts} />
 </Base>
 
-<script>
-  document.querySelector('.print')?.addEventListener('click', () => window.print());
-</script>
-
 <style>
-  .intro {
-    padding-block: clamp(3rem, 8vw, 5rem) 2.5rem;
+  .featured {
+    display: grid;
+    gap: 1.25rem;
   }
-  .intro h1 {
-    margin-top: 1rem;
-  }
-  .tagline {
-    margin-top: 1rem;
-    font-size: 1.1875rem;
-    color: var(--muted);
-  }
-  .contact {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 1.5rem;
-    margin: 1.75rem 0 0;
-    padding: 0;
-    font-size: 0.9375rem;
-  }
-  .print {
-    font: inherit;
-    color: var(--muted);
-    background: none;
+  .card {
+    padding: 1.5rem;
     border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 0.3rem 0.9rem;
-    cursor: pointer;
+    border-radius: 14px;
+    break-inside: avoid;
   }
-  .print:hover {
-    color: var(--accent);
-    border-color: currentColor;
+  .card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
   }
-  .client + .client {
-    margin-top: 2.75rem;
-  }
-  .client-name {
+  .card h3 {
     font-family: var(--serif);
-    font-size: 1.75rem;
-    margin-bottom: 1.25rem;
+    font-size: 2rem;
   }
-  .facts {
+  .role {
+    margin: 0.25rem 0 0;
+    font-weight: 600;
+  }
+  .lead {
+    margin: 0.75rem 0 0;
+    font-size: 1.0625rem;
+  }
+  .highlights {
+    margin: 0.75rem 0 1rem;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+  .highlights li + li {
+    margin-top: 0.25rem;
+  }
+  .skills {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+  }
+  .skill-group {
+    font: 600 0.9375rem var(--sans);
+    margin-bottom: 0.6rem;
+  }
+  .plain {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 2rem;
+    display: grid;
+    gap: 0.3rem;
   }
-  .facts span {
+  .columns {
+    display: block;
+    columns: 2 18rem;
+    column-gap: 2rem;
+  }
+  .columns li {
+    break-inside: avoid;
+    margin-bottom: 0.3rem;
+  }
+  .note {
     color: var(--faint);
   }
-
-  @media print {
-    @page {
-      margin: 16mm 14mm;
-    }
-    :global(:root) {
-      --bg: #fff;
-      --fg: #000;
-      --muted: #333;
-      --faint: #666;
-      --line: #ccc;
-      font-size: 10pt;
-    }
-    :global(a) {
-      text-decoration: none;
-    }
-    .no-print {
-      display: none;
-    }
-    .intro {
-      padding-block: 0 1rem;
-    }
-    .intro h1 {
-      font-size: 2.5rem;
-    }
-    /* the whole width of the paper for the content: the label of a section above it */
-    :global(.section) {
-      padding-block: 1.25rem;
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    break-inside: avoid;
+  }
+  .timeline .label {
+    padding-top: 0.2rem;
+  }
+  .timeline .note {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .more {
+    margin: 1.5rem 0 0;
+    font-size: 0.9375rem;
+  }
+  .edu {
+    margin: 0 0 0.4rem;
+  }
+  @media (max-width: 48rem) {
+    .skills {
       grid-template-columns: 1fr;
-      gap: 0.75rem;
     }
-    .client {
-      break-inside: auto;
+  }
+  @media (max-width: 36rem) {
+    .timeline li {
+      grid-template-columns: 1fr;
     }
-    .client-name {
-      font-size: 1.25rem;
-      break-after: avoid;
+    .card {
+      padding: 1.25rem;
+    }
+  }
+  @media print {
+    .card {
+      padding: 1rem 1.25rem;
+    }
+    .card h3 {
+      font-size: 1.5rem;
+    }
+    .skills {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>

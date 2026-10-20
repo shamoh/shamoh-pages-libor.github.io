@@ -17,3 +17,8 @@ const newestFirst = <T extends Dated>(entries: T[]): T[] =>
 export const getPositions = async () => newestFirst(await getCollection('positions'));
 export const getProjects = async () => newestFirst(await getCollection('projects'));
 export const getEducation = async () => newestFirst(await getCollection('education'));
+
+export const getCertifications = async () =>
+  (await getCollection('certifications')).sort(
+    (a, b) => b.data.year - a.data.year || (b.data.month ?? 0) - (a.data.month ?? 0) || a.data.name.localeCompare(b.data.name),
+  );

@@ -1,16 +1,77 @@
 # Work experience. start, end: the first and the last year; no end while the position lasts.
+# summary: one line for the short career overview of /cv/; highlights: the details (key positions on /cv/, all on
+# /cv/history/); featured: a key position shown in full on /cv/ (the last years).
 # The pages sort the entries by the years, the newest first (src/lib/cv.ts).
-- id: freelance-2018
-  role: Java Developer / Architect
-  company: Libor Freelancer Kramoliš
+- id: carpentum-2021
+  role: Scala Developer
+  company: Carpentum
+  location: Prague, freelance
+  summary: Payment gateway with crypto payments, built from Scala and Akka microservices.
+  start: 2021
+  highlights:
+  - Technical design, implementation and testing of individual services of a payment gateway, in Scala and Akka.
+  - Crypto payments on Tron and EVM chains (Ethereum, Base, BSC, Polygon, Arbitrum).
+  - REST APIs described with Tapir; services on AWS (SQS, SNS, S3, DynamoDB), run in Docker and Kubernetes.
+  featured: true
+  technologies:
+  - Scala
+  - Akka
+  - Tapir
+  - AWS
+  - Cassandra
+  - PostgreSQL
+  - DynamoDB
+  - Docker
+  - Kubernetes
+  - Tron
+  - EVM
+- id: leveris-2019
+  role: Senior Java Developer
+  company: Leveris
+  location: Prague, freelance
+  summary: Cloud-native core banking platform built from scratch.
+  start: 2019
+  end: 2021
+  highlights:
+  - Greenfield development of a cloud-native core banking platform, sold as SaaS to banks and fintech companies.
+  - Design and development of backend services in Java and Spring, one of them in Scala and Akka.
+  - Synchronous HTTP REST APIs described in RAML, asynchronous APIs over Kafka messaging.
+  featured: true
+  technologies:
+  - Java
+  - Spring
+  - Scala
+  - Akka
+  - Kafka
+  - MongoDB
+  - RAML
+  - AWS
+  - Kubernetes
+  - Chef
+  - Jenkins
+- id: creative-dock-2018
+  role: Senior Java Developer
+  company: Creative Dock
+  location: Prague, freelance
+  summary: Customer loans application for a corporate venture builder.
+  start: 2018
+  end: 2019
+  highlights:
+  - Client, advisor and back-office application for customer loans.
+- id: robot-reader-2018
+  role: Senior Java Developer
+  company: Robot Reader
+  location: Prague, freelance
+  summary: Fintech chatbot prototype.
   start: 2018
   end: 2018
   highlights:
-  - Java and Kotlin Developer, IT Architect, Technical Leader.
+  - Fintech chatbot prototype built from Kotlin microservices.
 - id: appdynamics-2017
   role: Technical Leader - Engineering
   company: AppDynamics (Cisco Systems)
   location: Prague
+  summary: Performance and modularisation of the AppDynamics Controller.
   start: 2017
   end: 2018
   highlights:
@@ -19,6 +80,7 @@
   role: Principal Software Engineer
   company: Oracle
   location: Prague
+  summary: Jersey (JAX-RS RI), Helidon configuration API, cloud platform tooling.
   start: 2013
   end: 2017
   highlights:
@@ -28,6 +90,7 @@
   role: Senior IT Architect / Head of Java EE development team
   company: Komerční banka
   location: Prague
+  summary: Head of the Java EE development team.
   start: 2012
   end: 2013
   highlights:
@@ -40,6 +103,7 @@
   role: IT Architect / Head of KB J2EE development framework team
   company: Komerční banka
   location: Prague
+  summary: Head of the corporate J2EE framework team.
   start: 2008
   end: 2011
   highlights:
@@ -50,6 +114,7 @@
   role: IT Architect / Senior Java Developer
   company: Komerční banka
   location: Prague
+  summary: J2EE SOA applications and the corporate framework.
   start: 2006
   end: 2008
   highlights:
@@ -59,6 +124,7 @@
   role: Senior Java developer & designer
   company: Corpus Solutions
   location: Prague
+  summary: Corporate web framework, portals and web services for public institutions.
   start: 2003
   end: 2006
   highlights:
@@ -69,6 +135,7 @@
   role: Senior Java developer
   company: Sun Microsystems
   location: Prague
+  summary: NetBeans IDE modules (XML support and more).
   start: 1999
   end: 2002
   highlights:
@@ -78,6 +145,7 @@
   role: Senior Java developer
   company: NetBeans
   location: Prague
+  summary: GUI components and NetBeans IDE modules.
   start: 1999
   end: 1999
   highlights:
