@@ -8,6 +8,7 @@
   name: Scala
 - id: go
   name: Go
+  note: beginner
 - id: driving-licence
   name: Driving licence
   note: B

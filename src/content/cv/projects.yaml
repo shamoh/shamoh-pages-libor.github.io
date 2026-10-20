@@ -1,4 +1,26 @@
 # Selected projects, each with the client it was done for; sorted by the years like positions.yaml.
+- id: carpentum-payment-gateway
+  client: Carpentum
+  name: Payment gateway
+  start: 2021
+  summary: Payment gateway built from microservices, including crypto payments on Tron and EVM chains (Ethereum, Base,
+    BSC, Polygon, Arbitrum).
+  highlights:
+  - Design and development of individual services in Scala and Akka.
+  - REST APIs described with Tapir.
+  - Small AWS Lambda applications in Go (beginner).
+  technologies:
+  - Scala
+  - Akka
+  - Tapir
+  - AWS (SQS, SNS, DynamoDB, S3, Lambda)
+  - Cassandra
+  - PostgreSQL
+  - Docker
+  - Kubernetes
+  - Tron
+  - EVM
+  - Go
 - id: leveris-core-banking-platform
   client: Leveris
   name: Cloud-native core banking platform

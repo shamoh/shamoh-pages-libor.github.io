@@ -6,7 +6,9 @@
   location: Prague, freelance
   start: 2021
   highlights:
-  - Backend development in Scala, Java and Go.
+  - Design and development of microservices of a payment gateway in Scala and Akka.
+  - Crypto payments integrations with Tron and EVM chains (Ethereum, Base, BSC, Polygon, Arbitrum).
+  - REST APIs described with Tapir; services on AWS, run in Docker and Kubernetes.
 - id: leveris-2019
   role: Senior Java Developer
   company: Leveris
