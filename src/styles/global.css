@@ -133,3 +133,15 @@ p {
     padding-block: 2.25rem;
   }
 }
+
+abbr[title] {
+  text-decoration: underline dotted var(--faint);
+  text-underline-offset: 0.2em;
+  cursor: help;
+}
+
+@media print {
+  abbr[title] {
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,103 @@
+/* Shared by the CV pages (/cv/ and /cv/history/). */
+
+.cv-intro {
+  padding-block: clamp(3rem, 8vw, 5rem) 2.5rem;
+}
+.cv-intro h1 {
+  margin-top: 1rem;
+}
+.tagline {
+  margin-top: 1rem;
+  font-size: 1.1875rem;
+  color: var(--muted);
+}
+.contact {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  font-size: 0.9375rem;
+}
+.print {
+  font: inherit;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+}
+.print:hover {
+  color: var(--accent);
+  border-color: currentColor;
+}
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+.chips li {
+  font: 400 0.8125rem/1.5 var(--mono);
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+}
+.abbreviations {
+  margin: 0;
+  columns: 2 16rem;
+  column-gap: 2rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.abbreviations div {
+  break-inside: avoid;
+  margin-bottom: 0.3rem;
+}
+.abbreviations dt {
+  display: inline;
+  font: 600 0.8125rem var(--mono);
+  color: var(--fg);
+}
+.abbreviations dd {
+  display: inline;
+  margin: 0 0 0 0.5rem;
+}
+
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+  :root {
+    --bg: #fff;
+    --fg: #000;
+    --muted: #333;
+    --faint: #666;
+    --line: #ccc;
+    font-size: 10pt;
+  }
+  a {
+    text-decoration: none;
+  }
+  .no-print {
+    display: none;
+  }
+  .cv-intro {
+    padding-block: 0 1rem;
+  }
+  .cv-intro h1 {
+    font-size: 2.5rem;
+  }
+  /* the whole width of the paper for the content: the label of a section above it */
+  .section {
+    padding-block: 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

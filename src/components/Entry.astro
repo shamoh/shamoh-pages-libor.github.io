@@ -1,5 +1,7 @@
 ---
 // One line of the CV: the period on the left, the title, its place and details on the right.
+// The texts are plain; their abbreviations get explained (src/lib/abbr.ts).
+import { abbr } from '../lib/abbr';
 import { period } from '../site';
 
 interface Props {
@@ -8,24 +10,27 @@ interface Props {
   title: string;
   /** the company or school, after the title */
   place?: string;
+  /** one line under the title */
+  summary?: string;
   highlights?: string[];
   technologies?: string[];
 }
 
-const { start, end, title, place, highlights = [], technologies = [] } = Astro.props;
+const { start, end, title, place, summary, highlights = [], technologies = [] } = Astro.props;
 ---
 
 <article class="entry">
   <p class="label when">{period(start, end)}</p>
   <div>
-    <h3>{title}{place && <span class="place"> · {place}</span>}</h3>
+    <h3><Fragment set:html={abbr(title)} />{place && <span class="place"> · <Fragment set:html={abbr(place)} /></span>}</h3>
+    {summary && <p class="summary" set:html={abbr(summary)} />}
     <slot />
     {highlights.length > 0 && (
       <ul>
-        {highlights.map((highlight) => <li>{highlight}</li>)}
+        {highlights.map((highlight) => <li set:html={abbr(highlight)} />)}
       </ul>
     )}
-    {technologies.length > 0 && <p class="tech">{technologies.join(' · ')}</p>}
+    {technologies.length > 0 && <p class="tech" set:html={technologies.map(abbr).join(' · ')} />}
   </div>
 </article>
 

@@ -1,0 +1,38 @@
+# Certificates, the newest first by year and month.
+- id: akka-scala-professional
+  name: Lightbend Akka for Scala - Professional
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 9
+- id: akka-cluster-fundamentals
+  name: Lightbend Akka Cluster Fundamentals
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 8
+- id: scala-professional
+  name: Lightbend Scala Language - Professional
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 8
+- id: lagom-java
+  name: Lightbend Lagom for Java Hello World
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 8
+- id: java-futures
+  name: Lightbend Java Language Futures
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 8
+- id: java-lambdas
+  name: Lightbend Java Language Lambdas
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 8
+- id: reactive-architecture
+  name: Reactive Architecture (1–6)
+  issuer: Lightbend (Akka)
+  year: 2020
+  month: 7
+  note: Introduction to Reactive Systems, Domain Driven Design, Reactive Microservices, Building Scalable Systems,
+    Distributed Messaging Patterns, CQRS & Event Sourcing

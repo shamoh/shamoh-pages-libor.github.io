@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { Content as Profile } from '../../texts/profile.md';
+import { paragraphs } from '../../lib/abbr';
+import profile from '../../texts/profile.md?raw';
 import { site } from '../../site';
 ---
 
@@ -12,7 +13,7 @@ import { site } from '../../site';
 
   <section class="section">
     <h2 class="label">Profile</h2>
-    <div class="prose"><Profile /></div>
+    <div class="prose">{paragraphs(profile).map((paragraph) => <p set:html={paragraph} />)}</div>
   </section>
 
   <section class="section">

@@ -6,5 +6,6 @@ export default defineConfig({
   output: 'static',
   // the compression drops the space at a line break between inline elements of the texts
   compressHTML: false,
-  integrations: [sitemap()],
+  // the CV proposal is a draft to compare with /cv/, not for search engines
+  integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith('/cv-2026') })],
 });
