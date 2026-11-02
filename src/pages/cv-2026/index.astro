@@ -1,0 +1,404 @@
+---
+// PROPOSAL of a modern one-page CV, to compare with /cv/ (see docs/cv-revize.md). The same data, presented for
+// a reader who has 30 seconds: who, what for, the last years in detail, the rest in one line each.
+import Abbreviations from '../../components/Abbreviations.astro';
+import EmailLink from '../../components/EmailLink.astro';
+import Base from '../../layouts/Base.astro';
+import { abbr } from '../../lib/abbr';
+import { getCertifications, getEducation } from '../../lib/cv';
+import { getEmployers, getSkills, isFreelance } from '../../lib/cv-2026';
+import { period, site } from '../../site';
+import { cv2026 as cv } from '../../texts/cv-2026';
+import { getCollection } from 'astro:content';
+import '../../styles/cv.css';
+
+const employers = await getEmployers();
+const freelance = employers.filter((employer) => isFreelance(employer.roles[0]));
+const key = freelance.filter((employer) => employer.roles[0].featured);
+const shortEngagements = freelance.filter((employer) => !employer.roles[0].featured);
+const earlier = employers.filter((employer) => !isFreelance(employer.roles[0]));
+const freelanceStart = Math.min(...freelance.map((employer) => employer.start));
+
+const skills = {
+  Languages: await getSkills('language'),
+  Architecture: await getSkills('approach'),
+  'Platforms & tools': await getSkills('tool'),
+};
+const certifications = await getCertifications();
+const issuers = [...new Set(certifications.map(({ data }) => data.issuer))].map((issuer) => {
+  const certs = certifications.filter(({ data }) => data.issuer === issuer);
+  // "Lightbend Akka Cluster Fundamentals" under the heading "Lightbend (Akka)" → "Akka Cluster Fundamentals"
+  const prefix = new RegExp(`^${issuer.split(' ')[0]}\\s+`);
+  return {
+    issuer,
+    years: [...new Set(certs.map(({ data }) => data.year))].join(', '),
+    names: certs.map(({ data }) => data.name.replace(prefix, '')),
+  };
+});
+const education = await getEducation();
+const languages = await getCollection('languages');
+
+const texts = [
+  cv.headline,
+  ...cv.summary,
+  ...cv.strengths.flatMap((strength) => [strength.title, strength.text]),
+  ...freelance.flatMap((e) => [e.context, ...e.roles.flatMap((r) => [r.role, r.summary, ...r.highlights, ...r.technologies])]),
+  ...earlier.flatMap((e) => [e.company, ...e.roles.flatMap((r) => [r.role, r.summary])]),
+  ...Object.values(skills).flatMap((list) => list.map((skill) => skill.name)),
+  ...certifications.map(({ data }) => data.name),
+  ...education.map(({ data }) => data.degree),
+];
+---
+
+<Base title="CV (proposal)" description={`CV of ${site.name}: ${cv.headline}.`} noindex>
+  <p class="proposal no-print">
+    Proposal of a new CV, to compare with the <a href="/cv/">current CV</a>. Details: <a href="/cv-2026/history/">career history</a>.
+  </p>
+
+  <header class="head">
+    <h1 class="display">{site.name}</h1>
+    <p class="headline" set:html={abbr(cv.headline)} />
+    <p class="facts">{cv.facts.join(' · ')}</p>
+    <ul class="contact">
+      <li><EmailLink><Fragment set:html={site.email} /></EmailLink></li>
+      <li><a href={site.url}>{new URL(site.url).host}</a></li>
+      {site.links.slice(0, 2).map((link) => <li><a href={link.url}>{link.title}</a></li>)}
+      <li class="no-print"><button type="button" class="print">Save as PDF</button></li>
+    </ul>
+  </header>
+
+  <section class="block">
+    <h2 class="label">Summary</h2>
+    <div class="summary">{cv.summary.map((paragraph) => <p set:html={abbr(paragraph)} />)}</div>
+    <ul class="strengths">
+      {cv.strengths.map((strength) => (
+        <li>
+          <strong>{strength.title}</strong>
+          <span set:html={abbr(strength.text)} />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2 class="label">Experience</h2>
+
+    <div class="employer">
+      <div class="row">
+        <h3>{cv.freelance.title}</h3>
+        <span class="label">{period(freelanceStart)}</span>
+      </div>
+      <p class="muted">{cv.freelance.subtitle}</p>
+
+      {key.map((employer) => {
+        const role = employer.roles[0];
+        return (
+          <article class="client">
+            <div class="row">
+              <h4>{employer.company} <span class="role">· {role.role}</span></h4>
+              <span class="label">{period(role.start, role.end)}</span>
+            </div>
+            {employer.context && <p class="context" set:html={abbr(employer.context)} />}
+            <ul class="bullets">{role.highlights.map((highlight) => <li set:html={abbr(highlight)} />)}</ul>
+            {role.technologies.length > 0 && (
+              <p class="stack"><span class="label">Stack</span> <span set:html={role.technologies.map(abbr).join(', ')} /></p>
+            )}
+          </article>
+        );
+      })}
+
+      {shortEngagements.length > 0 && (
+        <p class="short">
+          <span class="label">Short engagements</span>{' '}
+          <span
+            set:html={shortEngagements
+              .map((e) => `<strong>${e.company}</strong> (${period(e.start, e.end)}): ${abbr(e.roles[0].summary.replace(/\.$/, ''))}`)
+              .join('. ')}
+          />
+        </p>
+      )}
+    </div>
+
+    <div class="employer">
+      <div class="row">
+        <h3>Earlier career</h3>
+        <span class="label">{period(Math.min(...earlier.map((e) => e.start)), Math.max(...earlier.map((e) => e.end ?? 0)))}</span>
+      </div>
+      <ol class="earlier">
+        {earlier.map((employer) => (
+          <li>
+            <span class="label">{period(employer.start, employer.end)}</span>
+            <span>
+              <strong set:html={abbr(employer.company)} /> · <span set:html={abbr(employer.roles[0].role)} /><br />
+              <span class="muted" set:html={abbr(employer.roles.map((role) => role.summary).reverse().join(' '))} />
+            </span>
+          </li>
+        ))}
+      </ol>
+      <p class="more no-print"><a href="/cv-2026/history/">Every position and project in detail →</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="label">Skills</h2>
+    <dl class="skills">
+      {Object.entries(skills).map(([group, list]) => (
+        <div>
+          <dt>{group}</dt>
+          <dd set:html={list.map((skill) => abbr(skill.name) + (skill.note ? ` <span class="muted">(${skill.note})</span>` : '')).join(' · ')} />
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="block">
+    <h2 class="label">Certifications, education, languages</h2>
+    <dl class="skills">
+      {issuers.map((group) => (
+        <div>
+          <dt>{group.issuer}, {group.years}</dt>
+          <dd set:html={group.names.map(abbr).join(' · ')} />
+        </div>
+      ))}
+      {education.map(({ data }) => (
+        <div>
+          <dt>Education</dt>
+          <dd><span set:html={abbr(data.degree)} />, {data.school}, {data.end}</dd>
+        </div>
+      ))}
+      <div>
+        <dt>Languages</dt>
+        <dd>{languages.map(({ data }) => `${data.name} (${data.level})`).join(' · ')}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <Abbreviations texts={texts} common={false} />
+</Base>
+
+<script>
+  document.querySelector('.print')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .proposal {
+    margin: 1.5rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .head {
+    padding-block: clamp(2.5rem, 7vw, 4rem) 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .headline {
+    margin: 1rem 0 0;
+    font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+    font-weight: 500;
+  }
+  .facts {
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+  }
+  .block {
+    padding-block: 2.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .block > .label {
+    margin-bottom: 1.25rem;
+  }
+  .summary {
+    max-width: 46rem;
+    font-size: 1.0625rem;
+  }
+  .strengths {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2rem;
+  }
+  .strengths li {
+    display: grid;
+    align-content: start;
+    gap: 0.2rem;
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--accent);
+  }
+  .strengths span {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  .employer + .employer {
+    margin-top: 2.25rem;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .row .label {
+    white-space: nowrap;
+  }
+  h3 {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+  }
+  h4 {
+    font: 600 1.0625rem/1.4 var(--sans);
+  }
+  .role {
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .client {
+    margin-top: 1.5rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--line);
+  }
+  .client .row {
+    break-after: avoid;
+  }
+  .context {
+    margin: 0.2rem 0 0;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .bullets {
+    margin: 0.6rem 0 0;
+    padding-left: 1.1rem;
+  }
+  .bullets li + li {
+    margin-top: 0.25rem;
+  }
+  .stack {
+    margin: 0.6rem 0 0;
+    font: 400 0.875rem/1.6 var(--mono);
+    color: var(--muted);
+  }
+  .stack .label {
+    margin-right: 0.4rem;
+  }
+  .short {
+    margin: 1.5rem 0 0;
+    padding-left: 1rem;
+    border-left: 1px solid var(--line);
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .short strong {
+    color: var(--fg);
+  }
+  .earlier {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .earlier li {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    break-inside: avoid;
+  }
+  .earlier .label {
+    padding-top: 0.2rem;
+  }
+  .earlier .muted {
+    font-size: 0.9375rem;
+  }
+  .more {
+    margin: 1.25rem 0 0;
+    font-size: 0.9375rem;
+  }
+  .skills {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .skills div {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 0 1.5rem;
+    break-inside: avoid;
+  }
+  .skills dt {
+    font-weight: 600;
+  }
+  .skills dd {
+    margin: 0;
+  }
+  @media (max-width: 40rem) {
+    .strengths {
+      grid-template-columns: 1fr;
+    }
+    .earlier li,
+    .skills div {
+      grid-template-columns: 1fr;
+    }
+    .row {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+  @media print {
+    /* a little smaller than /cv/, so the one-pager fits on two sheets of paper */
+    :global(:root) {
+      font-size: 9.4pt;
+    }
+    .head {
+      padding-block: 0 0.75rem;
+    }
+    .skills {
+      gap: 0.4rem;
+    }
+    .block {
+      padding-block: 0.7rem;
+    }
+    .block > .label {
+      margin-bottom: 0.6rem;
+    }
+    .strengths {
+      margin-top: 0.8rem;
+    }
+    .bullets li + li {
+      margin-top: 0.1rem;
+    }
+    .summary p {
+      margin-bottom: 0.5em;
+    }
+    .client,
+    .short {
+      margin-top: 0.75rem;
+    }
+    .employer + .employer {
+      margin-top: 1.25rem;
+    }
+    .bullets,
+    .stack {
+      margin-top: 0.35rem;
+    }
+    .earlier {
+      gap: 0.4rem;
+    }
+    /* the abbreviations small and in three columns, so the CV fits on two pages */
+    :global(.abbreviations) {
+      columns: 3;
+      font-size: 8pt;
+    }
+    h3 {
+      font-size: 1.35rem;
+    }
+    .strengths {
+      gap: 0.6rem 1.5rem;
+    }
+  }
+</style>

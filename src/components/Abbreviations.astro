@@ -5,9 +5,12 @@ import { used } from '../lib/abbr';
 interface Props {
   /** all the plain texts the page shows */
   texts: (string | undefined)[];
+  /** list also the abbreviations every developer knows (API, HTTP, …); they keep their tooltip anyway */
+  common?: boolean;
 }
 
-const terms = used(Astro.props.texts);
+const { texts, common = true } = Astro.props;
+const terms = used(texts).filter((term) => common || !term.common);
 ---
 
 {terms.length > 0 && (

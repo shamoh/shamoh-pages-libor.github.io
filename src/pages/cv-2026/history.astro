@@ -1,0 +1,255 @@
+---
+// PROPOSAL of the detailed career history, to compare with /cv/history/ (see docs/cv-revize.md): every employer
+// once, with its roles and the projects done there, instead of positions and projects in two separate lists.
+import Abbreviations from '../../components/Abbreviations.astro';
+import Base from '../../layouts/Base.astro';
+import { abbr } from '../../lib/abbr';
+import { getCertifications, getEducation } from '../../lib/cv';
+import { getEmployers } from '../../lib/cv-2026';
+import { period, site } from '../../site';
+import { cv2026 as cv } from '../../texts/cv-2026';
+import '../../styles/cv.css';
+
+const employers = await getEmployers();
+const certifications = await getCertifications();
+const education = await getEducation();
+
+const texts = [
+  ...employers.flatMap((e) => [
+    e.company,
+    e.context,
+    e.location,
+    ...e.roles.flatMap((r) => [r.role, r.summary, ...r.highlights, ...r.technologies]),
+    ...e.projects.flatMap((p) => [p.name, p.summary, ...p.highlights, ...p.technologies]),
+  ]),
+  ...certifications.flatMap(({ data }) => [data.name, data.note]),
+  ...education.flatMap(({ data }) => [data.degree, data.school, data.thesis, data.note]),
+];
+---
+
+<Base title="Career history (proposal)" description={`The whole career of ${site.name} in detail.`} noindex>
+  <p class="proposal no-print">
+    Proposal, to compare with the <a href="/cv/history/">current history</a>. Back to the <a href="/cv-2026/">one-page CV</a>.
+  </p>
+
+  <header class="head">
+    <p class="label">Career history</p>
+    <h1 class="display">{site.name}</h1>
+    <p class="headline" set:html={abbr(cv.headline)} />
+    <p class="no-print"><button type="button" class="print">Save as PDF</button></p>
+  </header>
+
+  <nav class="toc no-print" aria-label="Employers">
+    {employers.map((employer) => (
+      <a href={`#${employer.company.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
+        {employer.company} <span class="label">{employer.start}</span>
+      </a>
+    ))}
+  </nav>
+
+  {employers.map((employer) => (
+    <section class="employer" id={employer.company.toLowerCase().replace(/[^a-z]+/g, '-')}>
+      <div class="row">
+        <h2 set:html={abbr(employer.company)} />
+        <span class="label">{period(employer.start, employer.end)}</span>
+      </div>
+      <p class="muted">
+        {employer.context && <span set:html={abbr(employer.context)} />} {employer.location && <span>{employer.location}</span>}
+      </p>
+
+      {employer.roles.map((role) => (
+        <article class="role">
+          <div class="row">
+            <h3 set:html={abbr(role.role)} />
+            <span class="label">{period(role.start, role.end)}</span>
+          </div>
+          <p class="summary" set:html={abbr(role.summary)} />
+          {role.highlights.length > 0 && <ul class="bullets">{role.highlights.map((h) => <li set:html={abbr(h)} />)}</ul>}
+        </article>
+      ))}
+
+      {employer.projects.length > 0 && (
+        <div class="projects">
+          <p class="label">Projects</p>
+          {employer.projects.map((project) => (
+            <article class="project">
+              <div class="row">
+                <h4 set:html={abbr(project.name)} />
+                <span class="label">{period(project.start, project.end)}</span>
+              </div>
+              {project.summary && <p class="muted" set:html={abbr(project.summary)} />}
+              {project.highlights.length > 0 && <ul class="bullets">{project.highlights.map((h) => <li set:html={abbr(h)} />)}</ul>}
+              {project.technologies.length > 0 && (
+                <ul class="chips">{project.technologies.map((t) => <li set:html={abbr(t)} />)}</ul>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  ))}
+
+  <section class="employer">
+    <h2>Certifications</h2>
+    <ul class="bullets plain">
+      {certifications.map(({ data }) => (
+        <li>
+          <strong set:html={abbr(data.name)} /> <span class="label">{data.issuer}, {data.month ? `${data.month}/` : ''}{data.year}</span>
+          {data.note && <><br /><span class="muted" set:html={abbr(data.note)} /></>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="employer">
+    <h2>Education</h2>
+    {education.map(({ data }) => (
+      <article class="role">
+        <div class="row">
+          <h3 set:html={abbr(`${data.degree}, ${data.school}`)} />
+          <span class="label">{period(data.start, data.end)}</span>
+        </div>
+        {data.thesis && <p class="summary" set:html={abbr(`Thesis: ${data.thesis}`)} />}
+        {data.note && <p class="summary" set:html={abbr(data.note)} />}
+      </article>
+    ))}
+  </section>
+
+  <Abbreviations texts={texts} />
+</Base>
+
+<script>
+  document.querySelector('.print')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .proposal {
+    margin: 1.5rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+  .head {
+    padding-block: clamp(2.5rem, 7vw, 4rem) 1.5rem;
+  }
+  .head h1 {
+    margin-top: 0.75rem;
+  }
+  .headline {
+    margin: 1rem 0 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  .print {
+    font: inherit;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    cursor: pointer;
+  }
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    padding-block: 1rem 2rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9375rem;
+  }
+  .toc a {
+    text-decoration: none;
+  }
+  .employer {
+    padding-block: 2.25rem;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 1rem;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .row .label {
+    white-space: nowrap;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: 2rem;
+  }
+  h3 {
+    font: 600 1.0625rem/1.4 var(--sans);
+  }
+  h4 {
+    font: 600 1rem/1.4 var(--sans);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .employer > .muted {
+    margin: 0.3rem 0 0;
+    font-style: italic;
+  }
+  .role {
+    margin-top: 1.5rem;
+    break-inside: avoid;
+  }
+  .summary {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+  }
+  .bullets {
+    margin: 0.5rem 0 0;
+    padding-left: 1.1rem;
+  }
+  .bullets li + li {
+    margin-top: 0.3rem;
+  }
+  .plain {
+    list-style: none;
+    padding: 0;
+  }
+  .projects {
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--fg) 3%, transparent);
+  }
+  .project + .project {
+    margin-top: 1.25rem;
+  }
+  .project {
+    break-inside: avoid;
+  }
+  .project .muted {
+    margin: 0.25rem 0 0;
+  }
+  .project .chips {
+    margin-top: 0.6rem;
+  }
+  @media (max-width: 40rem) {
+    .row {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+  @media print {
+    .head {
+      padding-block: 0 1rem;
+    }
+    .employer {
+      padding-block: 1rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    .projects {
+      padding: 0.75rem 1rem;
+      background: none;
+      border: 1px solid var(--line);
+    }
+  }
+</style>

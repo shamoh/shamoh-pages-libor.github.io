@@ -11,6 +11,8 @@ a přesný, nic přeplácaného.
 - CV ve dvou úrovních: `/cv/` je moderní one-pager (profil, klíčové pozice posledních let `featured: true` jako karty,
   dovednosti po skupinách, starší kariéra po jednom řádku `summary`), `/cv/history/` celá historie se všemi detaily
   a projekty. Žádné přeplácané CV plné odrážek: detaily patří do history.
+- Návrh nového CV `/cv-2026/` a `/cv-2026/history/` (noindex, mimo sitemap) ze stejných dat, k porovnání se
+  současným; zdůvodnění a otevřené otázky v `docs/cv-revize.md`. Texty návrhu v `src/texts/cv-2026.ts`.
 - Zkratky: každá v textech CV musí být v `src/content/cv/glossary.yaml` (title v uvozovkách); `src/lib/abbr.ts` je
   obalí `<abbr title>` a stránka je vypíše dole (i v PDF). Build varuje u neznámé zkratky. Texty CV jsou proto prostý
   text (žádné HTML), profil jen odstavce a `*kurzíva*`.

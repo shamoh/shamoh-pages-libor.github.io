@@ -12,6 +12,8 @@ const positions = defineCollection({
     role: z.string(),
     company: z.string(),
     location: z.string().optional(),
+    /** what the company or its product is, one short line (the CV proposal /cv-2026/) */
+    context: z.string().optional(),
     /** one line for the short career overview of /cv/ */
     summary: z.string(),
     start: year,
@@ -69,7 +71,11 @@ const skills = defineCollection({
 // Abbreviations: id = the abbreviation as written in the texts, title = what it means.
 const glossary = defineCollection({
   loader: cv('glossary'),
-  schema: z.object({ title: z.string() }),
+  schema: z.object({
+    title: z.string(),
+    /** well known to any developer (API, HTTP, …): explained on the web, left out of the printed list of /cv-2026/ */
+    common: z.boolean().default(false),
+  }),
 });
 
 const certifications = defineCollection({

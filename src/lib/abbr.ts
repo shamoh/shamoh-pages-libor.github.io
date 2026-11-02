@@ -8,10 +8,11 @@ const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const regexEscape = (text: string) => text.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 
-const entries = (await getCollection('glossary')).map(({ id, data }) => ({ term: id, title: data.title }));
+const entries = (await getCollection('glossary')).map(({ id, data }) => ({ term: id, title: data.title, common: data.common }));
 // the longest first, so "Java EE" wins over a shorter term inside it
 entries.sort((a, b) => b.term.length - a.term.length);
 const titles = new Map(entries.map((entry) => [entry.term, entry.title]));
+const common = new Set(entries.filter((entry) => entry.common).map((entry) => entry.term));
 const pattern = new RegExp(`(?<![\\w-])(${entries.map((entry) => regexEscape(entry.term)).join('|')})(?![\\w-])`, 'g');
 
 // words that look like an abbreviation but are names
@@ -39,10 +40,12 @@ export function abbr(text: string): string {
 }
 
 /** The abbreviations used in the texts, alphabetically, for the list at the bottom of a page. */
-export function used(texts: (string | undefined)[]): { term: string; title: string }[] {
+export function used(texts: (string | undefined)[]): { term: string; title: string; common: boolean }[] {
   const found = new Set<string>();
   for (const text of texts) if (text) for (const [term] of text.matchAll(pattern)) found.add(term);
-  return [...found].sort((a, b) => a.localeCompare(b)).map((term) => ({ term, title: titles.get(term)! }));
+  return [...found]
+    .sort((a, b) => a.localeCompare(b))
+    .map((term) => ({ term, title: titles.get(term)!, common: common.has(term) }));
 }
 
 /** HTML paragraphs of a short Markdown text (blank line = new paragraph, *text* = emphasis), abbreviations explained. */
